@@ -1,0 +1,22 @@
+﻿Open Package Manager console and change to the MemoryGame.Business folder (where the .csproj lives)
+
+Run a command similar to this to create the migrations:
+	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations add WordList_Tweaks
+
+Run this to list migrations
+	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations list
+
+Then use the entries in that list to generate the migrations script. Choose one migration to be the starting point and another to be the ending point. For example, after running the command
+	above, the output may be:
+		20180317134202_InitialCreate
+		20180317135305_WordList_Tweaks
+		20180317143648_WordList_Tweaks_2
+
+Running the following command will create a script with a diff from InitialCreate to the most recent migration
+	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations script 20180317134202_InitialCreate
+
+Or run this command to generate the entire migrations deployment script that will work no matter what state the db is in:
+	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations script -i
+
+
+	

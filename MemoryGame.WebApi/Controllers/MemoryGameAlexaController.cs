@@ -10,24 +10,27 @@ using Alexa.NET.Response;
 using Microsoft.ApplicationInsights.DataContracts;
 using Alexa.NET.Request.Type;
 using Alexa.NET;
+using MemoryGame.Business.Models;
 
 namespace memory.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/alexa/memory-game")]
     public class MemoryGameAlexaController : AlexaBaseController
     {
         private IConfiguration _configuration;
         private MemoryGameAlexaControllerService _alexaControllerService;
         
-        public MemoryGameAlexaController(IConfiguration configuration)
+        public MemoryGameAlexaController(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _configuration = configuration;
+            _alexaControllerService = new MemoryGameAlexaControllerService(serviceProvider);
         }
 
         [HttpGet]
         [Route("verify")]
         public JsonResult Verify()
         {
+            var result = _alexaControllerService.GetVerifyViewModel();
             return Json("The service is running");
         }
 
@@ -56,6 +59,7 @@ namespace memory.Controllers
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
 
                         //return EncouragingScripture();
+                        return null;
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {

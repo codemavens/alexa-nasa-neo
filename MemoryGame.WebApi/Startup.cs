@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MemoryGame.Business.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,7 +25,20 @@ namespace memory
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //figure out how to determine dev vs not dev here to use dev conn or keyvault conn
+            var environment = Configuration["Environment"];
+            if(environment == "Development")
+            {
+                services.AddDbContext<MemoryGameContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DevMemoryGame")));
+            }
+            else
+            {
+                services.AddDbContext<MemoryGameContext>(options =>
+                    options.UseSqlServer(Configuration["appSettings:connectionStrings:memory"]));
+            }
             services.AddMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
