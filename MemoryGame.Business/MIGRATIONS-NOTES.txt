@@ -15,8 +15,7 @@ Then use the entries in that list to generate the migrations script. Choose one 
 Running the following command will create a script with a diff from InitialCreate to the most recent migration
 	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations script 20180317134202_InitialCreate
 
-Or run this command to generate the entire migrations deployment script that will work no matter what state the db is in:
-	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations script -i
-
+Or run this command to generate the entire migrations deployment script that will work no matter what state the db is in (and save to a file):
+	dotnet ef  --startup-project  ../MemoryGame.WebApi migrations script -i -o c:\dev\mg-migration.sql
 
 	

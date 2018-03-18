@@ -8,6 +8,8 @@ namespace MemoryGame.Business.Models
         public int GameId { get; set; }
         public string Name { get; set; }
         public string Descr { get; set; }
+        public int SortOrder { get; set; }
+
         public List<GameLevel> Levels { get; set; }
         public WordList WordList { get; set; }
 

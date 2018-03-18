@@ -24,6 +24,10 @@ namespace MemoryGame.Business.Models
                 .Property(b => b.DateCreated)
                 .HasDefaultValueSql("getdate()");
 
+            modelBuilder.Entity<Game>()
+                .Property(b => b.SortOrder)
+                .HasDefaultValue(999);
+
             modelBuilder.Entity<GameLevel>()
                 .Property(b => b.DateCreated)
                 .HasDefaultValueSql("getdate()");

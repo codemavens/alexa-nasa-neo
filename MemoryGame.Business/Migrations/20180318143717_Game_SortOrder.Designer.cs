@@ -11,9 +11,10 @@ using System;
 namespace MemoryGame.Business.Migrations
 {
     [DbContext(typeof(MemoryGameContext))]
-    partial class MemoryGameContextModelSnapshot : ModelSnapshot
+    [Migration("20180318143717_Game_SortOrder")]
+    partial class Game_SortOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +38,7 @@ namespace MemoryGame.Business.Migrations
 
                     b.Property<int>("SortOrder")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(999);
+                        .HasDefaultValue(0);
 
                     b.HasKey("GameId");
 
