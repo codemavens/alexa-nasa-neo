@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MemoryGame.Business.Models;
+using NasaNeo.Business.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace memory
+namespace NasaNeo.WebApi
 {
     public class Startup
     {
@@ -27,16 +27,16 @@ namespace memory
         {
             //figure out how to determine dev vs not dev here to use dev conn or keyvault conn
             var environment = Configuration["Environment"];
-            if(environment == "Development")
-            {
-                services.AddDbContext<MemoryGameContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DevMemoryGame")));
-            }
-            else
-            {
-                services.AddDbContext<MemoryGameContext>(options =>
-                    options.UseSqlServer(Configuration["appSettings:connectionStrings:memory"]));
-            }
+            //if(environment == "Development")
+            //{
+            //    services.AddDbContext<MemoryGameContext>(options =>
+            //        options.UseSqlServer(Configuration.GetConnectionString("DevMemoryGame")));
+            //}
+            //else
+            //{
+            //    services.AddDbContext<MemoryGameContext>(options =>
+            //        options.UseSqlServer(Configuration["appSettings:connectionStrings:memory"]));
+            //}
             services.AddMvc();
 
         }

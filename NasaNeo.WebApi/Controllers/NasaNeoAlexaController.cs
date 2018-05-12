@@ -4,33 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MemoryGame.Business.ControllerServices;
-using MemoryGame.WebApi.Controllers;
+using NasaNeo.Business.ControllerServices;
+using NasaNeo.WebApi.Controllers;
 using Alexa.NET.Response;
 using Microsoft.ApplicationInsights.DataContracts;
 using Alexa.NET.Request.Type;
 using Alexa.NET;
-using MemoryGame.Business.Models;
+using NasaNeo.Business.Models;
+using NasaNeo.Business;
 
-namespace memory.Controllers
+namespace NasaNeo.WebApi.Controllers
 {
     [Route("api/alexa/memory-game")]
-    public class MemoryGameAlexaController : AlexaBaseController
+    public class NasaNeoAlexaController : AlexaBaseController
     {
         private IConfiguration _configuration;
-        private MemoryGameAlexaControllerService _alexaControllerService;
+        private NasaNeoAlexaControllerService _alexaControllerService;
         
-        public MemoryGameAlexaController(IConfiguration configuration, IServiceProvider serviceProvider)
+        public NasaNeoAlexaController(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _configuration = configuration;
-            _alexaControllerService = new MemoryGameAlexaControllerService(serviceProvider);
+            _alexaControllerService = new NasaNeoAlexaControllerService(serviceProvider);
         }
 
         [HttpGet]
         [Route("verify")]
         public JsonResult Verify()
         {
-            var result = _alexaControllerService.GetVerifyViewModel();
+            //var result = _alexaControllerService.GetVerifyViewModel();
             return Json("The service is running");
         }
 
@@ -53,7 +54,7 @@ namespace memory.Controllers
                     var intentRequest = input.Request as IntentRequest;
 
                     // check the name to determine what you should do
-                    if (intentRequest.Intent.Name.Equals("ScriptureIntent"))
+                    if (intentRequest.Intent.Name.Equals("TodayIntent"))
                     {
                         // get the slots
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
@@ -95,7 +96,7 @@ namespace memory.Controllers
 
             // build the speech response 
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = $"<speak>I didn't understand that request. Please try again.</speak>";
+            speech.Ssml = $"<speak>{Utils.GetRandomMessage(Globals.IDidntUnderstand)}</speak>";
 
             // create the response using the ResponseBuilder
             var finalResponse = ResponseBuilder.Tell(speech);
@@ -104,13 +105,15 @@ namespace memory.Controllers
 
         private SkillResponse Usage()
         {
+            var commonUsage = "You can say 'What are today's threats?' to list today's space-based threats to earth, or say Help to get more information.";
+
             // create the speech response - cards still need a voice response
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = "<speak>Welcome to Memory. You can say 'Start game' to start a game or say Help to get more information.</speak>";
+            speech.Ssml = $"<speak>Welcome to {Globals.FriendlyAppTitle}. {commonUsage}</speak>";
 
             // create the speech reprompt
             var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
-            repromptMessage.Text = "You can say 'Start game' to start a game or say Help to get more information.";
+            repromptMessage.Text = commonUsage;
 
             // create the reprompt
             var repromptBody = new Alexa.NET.Response.Reprompt();
@@ -124,11 +127,11 @@ namespace memory.Controllers
         {
             // create the speech response - cards still need a voice response
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = "<speak>Memory is a game that tests and improves your memory.</speak>";
+            speech.Ssml = $"<speak>Do you worry about space-based threats to earth such as asteroids and other near earth objects? {Globals.FriendlyAppTitle} will let you know what's out there zooming towards us.</speak>";
 
             // create the speech reprompt
             var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
-            repromptMessage.Text = "If you would like to start a game, say 'start game'.";
+            repromptMessage.Text = "Would you like to know today's threats?";
 
             // create the reprompt
             var repromptBody = new Alexa.NET.Response.Reprompt();

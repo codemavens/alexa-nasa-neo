@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace MemoryGame.WebApi.Controllers
+namespace NasaNeo.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/AlexaBase")]

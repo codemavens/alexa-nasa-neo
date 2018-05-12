@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MemoryGame.Business.Models
+namespace NasaNeo.Business.Models
 {
     public class User
     {

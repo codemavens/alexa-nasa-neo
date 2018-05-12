@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MemoryGame.Business.Models
+namespace NasaNeo.Business.Models
 {
     public class VerifyViewModel
     {

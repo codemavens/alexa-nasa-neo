@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MemoryGame.Business\MemoryGame.Business.csproj" />
+    <ProjectReference Include="..\NasaNeo.Business\NasaNeo.Business.csproj" />
   </ItemGroup>
 
   <ItemGroup>
