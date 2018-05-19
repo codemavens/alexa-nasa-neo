@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NasaNeo.Business.NasaApi;
 
 namespace NasaNeo.WebApi
 {
@@ -27,6 +28,9 @@ namespace NasaNeo.WebApi
         {
             //figure out how to determine dev vs not dev here to use dev conn or keyvault conn
             var environment = Configuration["Environment"];
+
+            //services.AddTransient<INasaNeoRepo>();
+            services.AddSingleton<INasaNeoRepo>(new NasaApiLiveRepo());
             //if(environment == "Development")
             //{
             //    services.AddDbContext<MemoryGameContext>(options =>

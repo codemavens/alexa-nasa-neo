@@ -12,6 +12,7 @@ using Alexa.NET.Request.Type;
 using Alexa.NET;
 using NasaNeo.Business.Models;
 using NasaNeo.Business;
+using NasaNeo.Business.NasaApi;
 
 namespace NasaNeo.WebApi.Controllers
 {
@@ -19,12 +20,14 @@ namespace NasaNeo.WebApi.Controllers
     public class NasaNeoAlexaController : AlexaBaseController
     {
         private IConfiguration _configuration;
-        private NasaNeoAlexaControllerService _alexaControllerService;
+        private NasaNeoAlexaControllerService _controllerService;
+        private INasaNeoRepo _repo;
         
-        public NasaNeoAlexaController(IConfiguration configuration, IServiceProvider serviceProvider)
+        public NasaNeoAlexaController(IConfiguration configuration, IServiceProvider serviceProvider, INasaNeoRepo repo)
         {
             _configuration = configuration;
-            _alexaControllerService = new NasaNeoAlexaControllerService(serviceProvider);
+            _controllerService = new NasaNeoAlexaControllerService(serviceProvider, repo);
+            _repo = repo;
         }
 
         [HttpGet]
@@ -59,8 +62,7 @@ namespace NasaNeo.WebApi.Controllers
                         // get the slots
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
 
-                        //return EncouragingScripture();
-                        return null;
+                        return _controllerService.GetNeoForDateRange(DateTime.Now, DateTime.Now);
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {
