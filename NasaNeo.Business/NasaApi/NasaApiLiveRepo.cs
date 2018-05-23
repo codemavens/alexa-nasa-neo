@@ -7,9 +7,9 @@ namespace NasaNeo.Business.NasaApi
 {
     public class NasaApiLiveRepo : INasaNeoRepo
     {
-        public List<NasaNeoDetails> GetNeoForDateRange(DateTime startDate, DateTime endDate)
+        public List<NasaNeoSet> GetNeoForDateRange(DateTime startDate, DateTime endDate)
         {
-            var result = new List<NasaNeoDetails>();
+            var result = new List<NasaNeoSet>();
 
 
 

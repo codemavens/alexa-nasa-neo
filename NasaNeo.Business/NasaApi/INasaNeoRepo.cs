@@ -7,6 +7,6 @@ namespace NasaNeo.Business.NasaApi
 {
     public interface INasaNeoRepo
     {
-        List<NasaNeoDetails> GetNeoForDateRange(DateTime startDate, DateTime endDate);
+        List<NasaNeoSet> GetNeoForDateRange(DateTime startDate, DateTime endDate);
     }
 }
