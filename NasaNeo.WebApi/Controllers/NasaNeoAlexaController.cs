@@ -62,7 +62,7 @@ namespace NasaNeo.WebApi.Controllers
                         // get the slots
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
 
-                        return _controllerService.GetNeoForDateRange(DateTime.Now, DateTime.Now);
+                        return _controllerService.GetNeoForDate(DateTime.Today);
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {

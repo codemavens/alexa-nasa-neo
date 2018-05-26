@@ -22,19 +22,19 @@ namespace NasaNeo.Business.ControllerServices
             _serviceProvider = serviceProvider;
         }
 
-        public SkillResponse GetNeoForDateRange(DateTime startDate, DateTime endDate)
+        public SkillResponse GetNeoForDate(DateTime neoDate)
         {
-            var neoForRange = _repo.GetNeoForDateRange(startDate, endDate);
+            var neoForRange = _repo.GetNeoForDate(neoDate);
 
             if(neoForRange.Count == 0)
             {
-                return NoResultsResponse(startDate, endDate);
+                return NoResultsResponse(neoDate);
             }
 
-            return NoResultsResponse(startDate, endDate);            
+            return NoResultsResponse(neoDate);            
         }
 
-        private SkillResponse NoResultsResponse(DateTime startDate, DateTime endDate)
+        private SkillResponse NoResultsResponse(DateTime startDate)
         {
             var response = BuildResponse("Yay! There are no threats to earth on that date!");
             return response;

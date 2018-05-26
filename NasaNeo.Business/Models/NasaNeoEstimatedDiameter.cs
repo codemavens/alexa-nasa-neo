@@ -4,6 +4,8 @@
     {
         public float MetersEstimatedMin { get; set; }
         public float MetersEstimatedMax { get; set; }
+        public float KilometersEstimatedMin { get; set; }
+        public float KilometersEstimatedMax { get; set; }
         public float MilesEstimatedMin { get; set; }
         public float MilesEstimatedMax { get; set; }
         public float FeetEstimatedMin { get; set; }
