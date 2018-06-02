@@ -21,7 +21,7 @@ namespace NasaNeo.Tests
         [InlineData("2018-03-24")]
         [InlineData("2018-03-25")]
         [InlineData("2018-03-23")]
-        public void ProcessNeoFromJson_MultipleEntriesReturnsGivenDate(string testDateParm)
+        public void ProcessNeoFromJson_MultipleEntriesReturnsSingleItemForGivenDate(string testDateParm)
         {
             var fileContents = new System.IO.StreamReader(@"C:\Dev\CodeMavens\Alexa\nasa-neo\sample-data\multi-sample-2018-03-23-to-2018-03-25.json").ReadToEnd();
 
@@ -31,6 +31,18 @@ namespace NasaNeo.Tests
             Assert.True(testItem.ItemsByDate.Count == 1);
             Assert.True(testItem.ItemsByDate[0].Date == testDate);
 
+        }
+
+        [Fact]
+        public void GetNeoForDateRange_NoItemsReturned()
+        {
+            var fileContents = new System.IO.StreamReader(@"C:\Dev\CodeMavens\Alexa\nasa-neo\sample-data\multi-sample-2018-03-23-to-2018-03-25.json").ReadToEnd();
+
+            var testDate = DateTime.Parse("2000-01-01");
+            var result = NasaApiHelper.ProcessNeoFromJson(fileContents, testDate);
+
+            Assert.NotNull(result);
+            Assert.Empty(result.ItemsByDate);
         }
     }
 }

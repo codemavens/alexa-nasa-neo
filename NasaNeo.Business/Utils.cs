@@ -4,11 +4,13 @@ using System.Text;
 
 namespace NasaNeo.Business
 {
-    public static class Utils
+    public class Utils
     {
-        public static string GetRandomMessage(List<string> messages)
+        Random randomizer = new Random();
+
+        public string GetRandomMessage(List<string> messages)
         {
-            return messages[0];
+            return messages[randomizer.Next(messages.Count)];
         }
     }
 }

@@ -96,9 +96,10 @@ namespace NasaNeo.WebApi.Controllers
                 LogMessage(exc.Message, SeverityLevel.Error, new Dictionary<string, string>() { { "Stack Trace", exc.StackTrace } });
             }
 
+            var util = new Utils();
             // build the speech response 
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = $"<speak>{Utils.GetRandomMessage(Globals.IDidntUnderstand)}</speak>";
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand)}</speak>";
 
             // create the response using the ResponseBuilder
             var finalResponse = ResponseBuilder.Tell(speech);
