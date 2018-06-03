@@ -33,9 +33,9 @@ namespace NasaNeo.Business.NasaApi
             httpClient.DefaultRequestHeaders.Accept.Clear();
             var stringTask = httpClient.GetStringAsync(
                 nasaNeoUrl
-                .Replace("start-date", neoDate.ToShortDateString())
-                .Replace("end-date", neoDate.ToShortDateString())
-                .Replace("key", nasaApiKey));
+                .Replace("{start-date}", neoDate.ToString("yyyy-MM-dd"))
+                .Replace("{end-date}", neoDate.ToString("yyyy-MM-dd"))
+                .Replace("{key}", nasaApiKey));
 
             var json = await stringTask;
 

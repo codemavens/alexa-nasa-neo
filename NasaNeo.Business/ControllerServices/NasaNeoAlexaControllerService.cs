@@ -16,12 +16,12 @@ namespace NasaNeo.Business.ControllerServices
     {
         const int numResultsToReturn = 3;
 
-        IServiceProvider _serviceProvider;
+        //IServiceProvider _serviceProvider;
         INasaNeoRepo _repo;
 
         public NasaNeoAlexaControllerService(IServiceProvider serviceProvider, INasaNeoRepo repo)
         {            
-            _serviceProvider = serviceProvider;
+            //_serviceProvider = serviceProvider;
             _repo = repo;
         }
 
