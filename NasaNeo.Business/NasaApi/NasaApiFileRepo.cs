@@ -11,12 +11,15 @@ namespace NasaNeo.Business.NasaApi
     {        
         public async Task<NasaNeoSet> GetNeoForDateAsync(DateTime neoDate)
         {
-            var fileContents = new System.IO.StreamReader(@"C:\Dev\CodeMavens\Alexa\nasa-neo\sample-data\multi-sample-2018-03-23-to-2018-03-25.json").ReadToEnd();
-            //var neoData = JsonConvert.DeserializeObject<object>(fileContents.ReadToEnd());
+            return await Task.Run(() =>
+            {
+                var fileContents = new System.IO.StreamReader(@"C:\Dev\CodeMavens\Alexa\nasa-neo\sample-data\multi-sample-2018-03-23-to-2018-03-25.json").ReadToEnd();
+                //var neoData = JsonConvert.DeserializeObject<object>(fileContents.ReadToEnd());
 
-            var result = NasaApiHelper.ProcessNeoFromJson(fileContents, neoDate);
+                var result = NasaApiHelper.ProcessNeoFromJson(fileContents, neoDate);
 
-            return result;
+                return result;
+            });
         }
     }
 }

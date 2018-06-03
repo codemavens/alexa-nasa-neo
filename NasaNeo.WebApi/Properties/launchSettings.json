@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/alexa/memory-game/verify",
+      "launchUrl": "api/alexa/duck-and-cover/verify",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
