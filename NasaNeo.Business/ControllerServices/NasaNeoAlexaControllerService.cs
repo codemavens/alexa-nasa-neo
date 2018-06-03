@@ -22,11 +22,12 @@ namespace NasaNeo.Business.ControllerServices
         public NasaNeoAlexaControllerService(IServiceProvider serviceProvider, INasaNeoRepo repo)
         {            
             _serviceProvider = serviceProvider;
+            _repo = repo;
         }
 
-        public SkillResponse GetNeoForDate(DateTime neoDate)
+        public async Task<SkillResponse> GetNeoForDate(DateTime neoDate)
         {
-            var neoForRange = _repo.GetNeoForDate(neoDate);
+            var neoForRange = await _repo.GetNeoForDateAsync(neoDate);
 
             if(neoForRange.ItemsByDate.Count == 0)
             {
@@ -57,8 +58,10 @@ namespace NasaNeo.Business.ControllerServices
 
         }
 
+        //TODO: Make the responses more interesting -vary, add ssml effects or something
         private string GetTextResponseForNeo(NasaNeoItem neo)
         {
+      
             var result = new StringBuilder();
 
             result.Append($"Object {neo.Name}");
@@ -103,18 +106,5 @@ namespace NasaNeo.Business.ControllerServices
             var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
             return finalResponse;
         }
-        //public VerifyViewModel GetVerifyViewModel()
-        //{
-        //    var result = new VerifyViewModel();
-
-        //    // test the db connection
-        //    using (var dbContext = _serviceProvider.GetRequiredService<MemoryGameContext>())
-        //    {
-        //        var count = dbContext.Games.Count();
-        //        result.DBConnectionVerified = true;
-        //    }
-
-        //    return result;
-        //}
     }
 }

@@ -37,6 +37,8 @@ namespace NasaNeo.WebApi
                 config["azureKeyVault:clientId"],
                 config["azureKeyVault:clientSecret"]
             );
+
+            
         }
 
     }

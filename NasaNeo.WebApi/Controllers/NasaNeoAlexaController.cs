@@ -16,7 +16,7 @@ using NasaNeo.Business.NasaApi;
 
 namespace NasaNeo.WebApi.Controllers
 {
-    [Route("api/alexa/memory-game")]
+    [Route("api/alexa/duck-and-cover")]
     public class NasaNeoAlexaController : AlexaBaseController
     {
         private IConfiguration _configuration;
@@ -62,7 +62,7 @@ namespace NasaNeo.WebApi.Controllers
                         // get the slots
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
 
-                        return _controllerService.GetNeoForDate(DateTime.Today);
+                        return await _controllerService.GetNeoForDate(DateTime.Today);
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {

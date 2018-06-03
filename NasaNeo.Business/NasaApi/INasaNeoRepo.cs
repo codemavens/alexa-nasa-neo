@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NasaNeo.Business.NasaApi
 {
     public interface INasaNeoRepo
     {
-        NasaNeoSet GetNeoForDate(DateTime neoDate);
+        Task<NasaNeoSet> GetNeoForDateAsync(DateTime neoDate);
     }
 }

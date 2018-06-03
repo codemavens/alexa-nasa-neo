@@ -30,7 +30,8 @@ namespace NasaNeo.WebApi
             var environment = Configuration["Environment"];
 
             //services.AddTransient<INasaNeoRepo>();
-            services.AddSingleton<INasaNeoRepo>(new NasaApiLiveRepo());
+            services.AddSingleton<INasaNeoRepo>(new NasaApiLiveRepo(Configuration));
+
             //if(environment == "Development")
             //{
             //    services.AddDbContext<MemoryGameContext>(options =>
@@ -41,7 +42,7 @@ namespace NasaNeo.WebApi
             //    services.AddDbContext<MemoryGameContext>(options =>
             //        options.UseSqlServer(Configuration["appSettings:connectionStrings:memory"]));
             //}
-            services.AddMvc();
+            services.AddMvc();            
 
         }
 

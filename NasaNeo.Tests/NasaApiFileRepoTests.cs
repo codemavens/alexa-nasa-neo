@@ -11,7 +11,7 @@ namespace NasaNeo.Tests
         public void GetNeoForDateRange_SingleDateTest()
         {
             var testDate = DateTime.Parse("2018-05-17");
-            var result = new NasaApiFileRepo().GetNeoForDate(testDate);
+            var result = new NasaApiFileRepo().GetNeoForDateAsync(testDate);
 
             Assert.NotNull(result);
 
