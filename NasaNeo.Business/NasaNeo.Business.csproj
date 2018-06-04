@@ -12,12 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.5.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
   </ItemGroup>
-  
-<ItemGroup>
-  <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
-</ItemGroup>
   
 <ItemGroup>
   <Folder Include="Migrations\" />
