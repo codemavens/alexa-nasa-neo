@@ -17,12 +17,14 @@ namespace NasaNeo.Business.ControllerServices
         const int numResultsToReturn = 3;
 
         //IServiceProvider _serviceProvider;
-        INasaNeoRepo _repo;
+        private INasaNeoRepo _repo;
+        private Utils _util;
 
         public NasaNeoAlexaControllerService(IServiceProvider serviceProvider, INasaNeoRepo repo)
         {            
             //_serviceProvider = serviceProvider;
             _repo = repo;
+            _util = new Utils();
         }
 
         public async Task<SkillResponse> GetNeoForDate(DateTime neoDate)
@@ -42,7 +44,7 @@ namespace NasaNeo.Business.ControllerServices
             var textResult = new StringBuilder(10000);
             var ssmlResult = new StringBuilder(10000);
 
-            textResult.Append($"There are {neoForDate.ElementCount} threats to earth today. Here are the top {numResultsToReturn}");
+            textResult.Append($"There are {neoForDate.ElementCount} threats to earth today. Here are the top {numResultsToReturn}.");
             ssmlResult.Append($"<speak>{textResult.ToString()}");
 
             for (int i = 0; i < numResultsToReturn && i < neoForDate.ElementCount; i++)
@@ -66,8 +68,8 @@ namespace NasaNeo.Business.ControllerServices
 
             result.Append($"Object {neo.Name}");
             result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
-            result.Append($" It is hurtling to towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
-            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles");
+            result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
+            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles.");
             result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}");
             
             return result.ToString();
@@ -76,10 +78,10 @@ namespace NasaNeo.Business.ControllerServices
         {
             var result = new StringBuilder();
             
-            result.Append($"Object {neo.Name}");
+            result.Append($"<p>Object {neo.Name} <emphasis level=\"reduced\">{_util.GetRandomMessage(Globals.SSML.Phew)}</emphasis>");
             result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
-            result.Append($" It is hurtling to towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
-            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles");
+            result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
+            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles <emphasis level=\"reduced\">{_util.GetRandomMessage(Globals.SSML.Wow)}</emphasis>.</p>");
             
             return result.ToString();
         }

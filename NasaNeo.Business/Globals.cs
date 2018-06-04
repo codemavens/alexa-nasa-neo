@@ -12,5 +12,20 @@ namespace NasaNeo.Business
                                                                            "Hmmm, I'm not sure I can do that. Please try again.",
                                                                            "I'm not sure what you're asking. Can you rephrase that?"};
 
+        public static class SSML
+        {
+            public static List<string> Phew = new List<string>() { "<p><say-as interpret-as=\"interjection\">phew</p>",
+                                                                   "", // blank so we don't wear this out
+                                                                   "", // another blank for the randonmizer
+                                                                   "all righty",
+                                                                   "oy" };
+
+            public static List<string> Wow = new List<string>() { "<p><say-as interpret-as=\"interjection\">wow</p>",
+                                                                   "", // blank so we don't wear this out
+                                                                   "", // another blank for the randonmizer
+                                                                   "wowza",
+                                                                   "wowzer",
+                                                                   "dun dun dun"};
+        }
     }
 }
