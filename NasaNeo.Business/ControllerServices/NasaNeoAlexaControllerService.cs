@@ -45,7 +45,7 @@ namespace NasaNeo.Business.ControllerServices
             var ssmlResult = new StringBuilder(10000);
 
             textResult.Append($"There are {neoForDate.ElementCount} threats to earth today. Here are the top {numResultsToReturn}.");
-            ssmlResult.Append($"<speak>{textResult.ToString()}");
+            ssmlResult.Append($"<speak>{_util.GetRandomMessage(Globals.SSML.RedAlert)}{textResult.ToString()}");
 
             for (int i = 0; i < numResultsToReturn && i < neoForDate.ElementCount; i++)
             {
@@ -78,7 +78,7 @@ namespace NasaNeo.Business.ControllerServices
         {
             var result = new StringBuilder();
             
-            result.Append($"<p>Object {neo.Name} <break strength=\"weak\" /><emphasis level=\"reduced\">{_util.GetRandomMessage(Globals.SSML.Phew)}</emphasis>");
+            result.Append($"<p>Object {neo.Name} <break strength=\"weak\" /><emphasis level=\"moderate\">{_util.GetRandomMessage(Globals.SSML.Phew)}</emphasis>");
             result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
             result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
             result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles <break strength=\"weak\" /><emphasis level=\"strong\">{_util.GetRandomMessage(Globals.SSML.Wow)}</emphasis></p>");
