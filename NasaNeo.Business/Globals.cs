@@ -25,7 +25,9 @@ namespace NasaNeo.Business
                                                                    "", // another blank for the randonmizer
                                                                    "wowza",
                                                                    "wowzer",
-                                                                   "dun dun dun"};
+                                                                   "dun dun dun",
+                                                                   "woo hoo",
+                                                                   "swoosh"};
         }
     }
 }

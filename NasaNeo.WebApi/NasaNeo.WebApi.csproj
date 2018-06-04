@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <Content Update="azurekeyvault.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

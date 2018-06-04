@@ -66,11 +66,11 @@ namespace NasaNeo.Business.ControllerServices
       
             var result = new StringBuilder();
 
-            result.Append($"Object {neo.Name}");
+            result.Append($"<p>Object {neo.Name}");
             result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
             result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
             result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles.");
-            result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}");
+            result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.</p>");
             
             return result.ToString();
         }
@@ -78,10 +78,10 @@ namespace NasaNeo.Business.ControllerServices
         {
             var result = new StringBuilder();
             
-            result.Append($"<p>Object {neo.Name} <emphasis level=\"reduced\">{_util.GetRandomMessage(Globals.SSML.Phew)}</emphasis>");
+            result.Append($"<p>Object {neo.Name} <break strength=\"weak\" /><emphasis level=\"reduced\">{_util.GetRandomMessage(Globals.SSML.Phew)}</emphasis>");
             result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
             result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
-            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles <emphasis level=\"reduced\">{_util.GetRandomMessage(Globals.SSML.Wow)}</emphasis>.</p>");
+            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles <break strength=\"weak\" /><emphasis level=\"strong\">{_util.GetRandomMessage(Globals.SSML.Wow)}</emphasis></p>");
             
             return result.ToString();
         }
