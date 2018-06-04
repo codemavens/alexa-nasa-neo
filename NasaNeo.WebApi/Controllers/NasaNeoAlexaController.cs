@@ -64,6 +64,11 @@ namespace NasaNeo.WebApi.Controllers
 
                         return await _controllerService.GetNeoForDate(DateTime.Today);
                     }
+                    else if(intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Cancel) ||
+                            intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Stop))
+                    {
+                        return Exit();
+                    }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {
                         return Help();
@@ -144,6 +149,17 @@ namespace NasaNeo.WebApi.Controllers
             return finalResponse;
         }
 
+        private SkillResponse Exit()
+        {
+            var util = new Utils();
+            // build the speech response 
+            var speech = new Alexa.NET.Response.SsmlOutputSpeech();
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.GoodBye)}</speak>";
+
+            // create the response using the ResponseBuilder
+            var finalResponse = ResponseBuilder.Tell(speech);
+            return finalResponse;
+        }
 
     }
 }
