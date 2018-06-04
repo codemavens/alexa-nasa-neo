@@ -104,7 +104,7 @@ namespace NasaNeo.WebApi.Controllers
             var util = new Utils();
             // build the speech response 
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand)}</speak>";
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand, false)}</speak>";
 
             // create the response using the ResponseBuilder
             var finalResponse = ResponseBuilder.Tell(speech);
@@ -154,7 +154,7 @@ namespace NasaNeo.WebApi.Controllers
             var util = new Utils();
             // build the speech response 
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.GoodBye)}</speak>";
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.GoodBye, false)}</speak>";
 
             // create the response using the ResponseBuilder
             var finalResponse = ResponseBuilder.Tell(speech);
