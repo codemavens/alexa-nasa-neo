@@ -20,7 +20,7 @@ namespace NasaNeo.Business
         {
             public static List<string> Phew = new List<string>() { "<say-as interpret-as=\"interjection\">phew</say-as>",
                                                                    String.Empty, // blank so we don't wear this out
-                                                                   String.Empty, // another blank for the randonmizer
+                                                                   String.Empty, // another blank for the randomizer
                                                                    "<say-as interpret-as=\"interjection\">all righty</say-as>",
                                                                    "<say-as interpret-as=\"interjection\">oy</say-as>" };
 

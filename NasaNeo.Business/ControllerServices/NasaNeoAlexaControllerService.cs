@@ -99,7 +99,7 @@ namespace NasaNeo.Business.ControllerServices
 
             // create the speech reprompt
             var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
-            repromptMessage.Text = message;
+            repromptMessage.Text = "Can I help you with anything else?";
 
             // create the reprompt
             var repromptBody = new Alexa.NET.Response.Reprompt();
