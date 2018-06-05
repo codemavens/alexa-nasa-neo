@@ -14,7 +14,7 @@ namespace NasaNeo.Business.ControllerServices
 {
     public class NasaNeoAlexaControllerService
     {
-        const int numResultsToReturn = 3;
+        const int ResultsPageSize = 3;
 
         //IServiceProvider _serviceProvider;
         private INasaNeoRepo _repo;
@@ -43,11 +43,18 @@ namespace NasaNeo.Business.ControllerServices
         {
             var textResult = new StringBuilder(10000);
             var ssmlResult = new StringBuilder(10000);
+            var numResultsToReturn = Math.Max(ResultsPageSize, neoForDate.ElementCount);
 
-            textResult.Append($"There are {neoForDate.ElementCount} threats to earth today. Here are the top {numResultsToReturn}.");
+
+            textResult.Append($"There are {neoForDate.ElementCount} threats to earth today.");
+            if( numResultsToReturn < neoForDate.ElementCount)
+            {
+                textResult.Append($"Here are the top {ResultsPageSize}.");
+            }
+            
             ssmlResult.Append($"<speak>{_util.GetRandomMessage(Globals.SSML.RedAlert)}{textResult.ToString()}");
 
-            for (int i = 0; i < numResultsToReturn && i < neoForDate.ElementCount; i++)
+            for (int i = 0; i < ResultsPageSize && i < neoForDate.ElementCount; i++)
             {
                 // right now we're only supporting one item per date. Should change this to not be a list until we support more dates
                 textResult.Append(GetTextResponseForNeo(neoForDate.ItemsByDate[0].NeoItems[i]));
@@ -56,7 +63,7 @@ namespace NasaNeo.Business.ControllerServices
 
             ssmlResult.Append("</speak>");
 
-            return BuildResponse(textResult.ToString(), ssmlResult.ToString());
+            return BuildResponse($"Threats for {neoForDate.ItemsByDate[0].Date}", textResult.ToString(), ssmlResult.ToString());
 
         }
 
@@ -66,10 +73,10 @@ namespace NasaNeo.Business.ControllerServices
       
             var result = new StringBuilder();
 
-            result.Append($"<p>Object {neo.Name}");
-            result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
-            result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
-            result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles.");
+            result.Append($"<p>Object {neo.Name}.");
+            result.Append($" Diameter: {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} - {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet.");
+            result.Append($" Velocity: {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
+            result.Append($" It will miss us by: {Math.Round(neo.MissDistance.Miles, 0)} miles.");
             result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.</p>");
             
             return result.ToString();
@@ -88,14 +95,14 @@ namespace NasaNeo.Business.ControllerServices
 
         private SkillResponse NoResultsResponse(DateTime startDate)
         {
-            var response = BuildResponse($"Yay! There are no threats to earth on {startDate.ToLongDateString()}!");
+            var response = BuildResponse("No threats", $"Yay! There are no threats to earth on {startDate.ToLongDateString()}!");
             return response;
         }
 
-        private SkillResponse BuildResponse(string message, string ssml = "")
+        private SkillResponse BuildResponse(string cardTitle, string plainTextContent, string ssml = "")
         {
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = (ssml.Length > 0 ? ssml : $"<speak>{message}</speak>");
+            speech.Ssml = (ssml.Length > 0 ? ssml : $"<speak>{plainTextContent}</speak>");
 
             // create the speech reprompt
             var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
@@ -105,7 +112,8 @@ namespace NasaNeo.Business.ControllerServices
             var repromptBody = new Alexa.NET.Response.Reprompt();
             repromptBody.OutputSpeech = repromptMessage;
 
-            var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
+            var finalResponse = ResponseBuilder.AskWithCard(speech.Ssml, cardTitle, plainTextContent, repromptBody);
+            //var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
             return finalResponse;
         }
     }

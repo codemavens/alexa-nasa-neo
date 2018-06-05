@@ -22,12 +22,14 @@ namespace NasaNeo.WebApi.Controllers
         private IConfiguration _configuration;
         private NasaNeoAlexaControllerService _controllerService;
         private INasaNeoRepo _repo;
-        
+        private Utils _util;
+
         public NasaNeoAlexaController(IConfiguration configuration, IServiceProvider serviceProvider, INasaNeoRepo repo)
         {
             _configuration = configuration;
             _controllerService = new NasaNeoAlexaControllerService(serviceProvider, repo);
             _repo = repo;
+            _util = new Utils();
         }
 
         [HttpGet]
@@ -73,6 +75,10 @@ namespace NasaNeo.WebApi.Controllers
                     {
                         return Help();
                     }
+                    else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Fallback))
+                    {
+                        return FallbackHelp();
+                    }
                     else
                     {
                         return ErrorResponse();
@@ -104,10 +110,18 @@ namespace NasaNeo.WebApi.Controllers
             var util = new Utils();
             // build the speech response 
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand, false)}</speak>";
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand, false)}. Try saying 'What are today's threats' to list today's threats.</speak>";
+
+            // create the speech reprompt
+            var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
+            repromptMessage.Text = "Try saying 'What are today's threats' to list today's threats.";
+
+            // create the reprompt
+            var reprompt = new Alexa.NET.Response.Reprompt();
+            reprompt.OutputSpeech = repromptMessage;
 
             // create the response using the ResponseBuilder
-            var finalResponse = ResponseBuilder.Tell(speech);
+            var finalResponse = ResponseBuilder.Ask(speech, reprompt);
             return finalResponse;
         }
 
@@ -139,7 +153,25 @@ namespace NasaNeo.WebApi.Controllers
 
             // create the speech reprompt
             var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
-            repromptMessage.Text = "Would you like to know today's threats?";
+            repromptMessage.Text = "Try saying 'What are today's threats?'";
+
+            // create the reprompt
+            var repromptBody = new Alexa.NET.Response.Reprompt();
+            repromptBody.OutputSpeech = repromptMessage;
+
+            var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
+            return finalResponse;
+        }
+
+        private SkillResponse FallbackHelp()
+        {
+            // create the speech response - cards still need a voice response
+            var speech = new Alexa.NET.Response.SsmlOutputSpeech();
+            speech.Ssml = $"<speak>{_util.GetRandomMessage(Globals.IDidntUnderstand)}. You might try 'What are today's threats?'</speak>";
+
+            // create the speech reprompt
+            var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
+            repromptMessage.Text = "Try saying 'What are today's threats?'";
 
             // create the reprompt
             var repromptBody = new Alexa.NET.Response.Reprompt();
