@@ -23,8 +23,8 @@ namespace NasaNeo.Business
                                                                    "<say-as interpret-as=\"interjection\">oy</say-as>" };
 
             public static List<string> Wow = new List<string>() { "<say-as interpret-as=\"interjection\">wow</say-as>",
-                                                                   "<say-as interpret-as=\"interjection\">wowza</say-as>",
-                                                                   "<say-as interpret-as=\"interjection\">wowzer</say-as>",
+                                                                   //"<say-as interpret-as=\"interjection\">wowza</say-as>",
+                                                                   //"<say-as interpret-as=\"interjection\">wowzer</say-as>",
                                                                    "<say-as interpret-as=\"interjection\">dun dun dun</say-as>",
                                                                    "<say-as interpret-as=\"interjection\">woo hoo</say-as>",
                                                                    "<say-as interpret-as=\"interjection\">swoosh</say-as>",

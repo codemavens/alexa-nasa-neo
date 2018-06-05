@@ -72,10 +72,10 @@ namespace NasaNeo.Business.ControllerServices
             var result = new StringBuilder();
 
             result.Append($"\n\nObject {neo.Name}.");
-            result.Append($"Diameter: {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} - {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet.");
-            result.Append($"Velocity: {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
-            result.Append($"It will miss us by: {Math.Round(neo.MissDistance.Miles, 0)} miles.");
-            result.Append($"Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.");
+            result.Append($" Diameter: between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} - {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet.");
+            result.Append($" Velocity: {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour.");
+            result.Append($" It will miss us by: {Math.Round(neo.MissDistance.Miles, 0)} miles.");
+            result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.");
             
             return result.ToString();
         }
@@ -102,16 +102,16 @@ namespace NasaNeo.Business.ControllerServices
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
             speech.Ssml = (ssml.Length > 0 ? ssml : $"<speak>{plainTextContent}</speak>");
 
-            // create the speech reprompt
-            var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
-            repromptMessage.Text = "Can I help you with anything else?";
-
-            // create the reprompt
-            var repromptBody = new Alexa.NET.Response.Reprompt();
-            repromptBody.OutputSpeech = repromptMessage;
-
-            var finalResponse = ResponseBuilder.AskWithCard(speech, cardTitle, plainTextContent, repromptBody);
-            //var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
+            //add this back in when we support multiple dates
+            //// create the speech reprompt
+            //var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
+            //repromptMessage.Text = "Can I help you with anything else?";
+            //// create the reprompt
+            //var repromptBody = new Alexa.NET.Response.Reprompt();
+            //repromptBody.OutputSpeech = repromptMessage;
+            //var finalResponse = ResponseBuilder.AskWithCard(speech, cardTitle, plainTextContent, repromptBody);
+            
+            var finalResponse = ResponseBuilder.TellWithCard(speech, cardTitle, plainTextContent);
             return finalResponse;
         }
     }
