@@ -13,6 +13,7 @@ using Alexa.NET;
 using NasaNeo.Business.Models;
 using NasaNeo.Business;
 using NasaNeo.Business.NasaApi;
+using Alexa.NET.Request;
 
 namespace NasaNeo.WebApi.Controllers
 {
@@ -42,21 +43,28 @@ namespace NasaNeo.WebApi.Controllers
 
         [HttpPost]
         [Route("alexa-home")]
-        public async Task<SkillResponse> AlexaHome()
+        public async Task<ActionResult> AlexaHome()
         {
             try
             {
-                var input = await GetSkillRequestFromPost();
-                if (input == null || input.Request == null) { LogMessage("input request is null", SeverityLevel.Error, null); }
+                var skillRequest = await GetSkillRequestFromPost();
+                if (skillRequest == null || skillRequest.Request == null) { LogMessage("input request is null", SeverityLevel.Error, null); }
+
+                var validationResult = await CheckBadRequest(skillRequest);
+                if( validationResult != null )
+                {
+                    return validationResult;
+                }
+
 
                 // check what type of a request it is like an IntentRequest or a LaunchRequest
-                var requestType = input.GetRequestType();
-                LogMessage($"requestType == {requestType}", SeverityLevel.Information, null);
+                var requestType = skillRequest.GetRequestType();
+                //LogMessage($"requestType == {requestType}", SeverityLevel.Information, null);
 
                 if (requestType == typeof(IntentRequest))
                 {
                     // do some intent-based stuff
-                    var intentRequest = input.Request as IntentRequest;
+                    var intentRequest = skillRequest.Request as IntentRequest;
 
                     // check the name to determine what you should do
                     if (intentRequest.Intent.Name.Equals("TodayIntent"))
@@ -64,39 +72,39 @@ namespace NasaNeo.WebApi.Controllers
                         // get the slots
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
 
-                        return await _controllerService.GetNeoForDate(DateTime.Today);
+                        return Json(await _controllerService.GetNeoForDate(DateTime.Today));
                     }
                     else if(intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Cancel) ||
                             intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Stop))
                     {
-                        return Exit();
+                        return Json(Exit());
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {
-                        return Help();
+                        return Json(Help());
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Fallback))
                     {
-                        return FallbackHelp();
+                        return Json(FallbackHelp());
                     }
                     else
                     {
-                        return ErrorResponse();
+                        return Json(ErrorResponse());
                     }
                 }
                 else if (requestType == typeof(Alexa.NET.Request.Type.LaunchRequest))
                 {
-                    return Usage();
+                    return Json(Usage());
                 }
                 else
                 {
-                    return ErrorResponse();
+                    return Json(ErrorResponse());
                 }
 
             }
             catch (Exception exc)
             {
-                return ErrorResponse(exc);
+                return Json(ErrorResponse(exc));
             }
         }
 
