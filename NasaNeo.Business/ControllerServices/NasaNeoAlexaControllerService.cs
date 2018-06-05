@@ -53,17 +53,15 @@ namespace NasaNeo.Business.ControllerServices
             }
             
             ssmlResult.Append($"<speak>{_util.GetRandomMessage(Globals.SSML.RedAlert)}{textResult.ToString()}");
-
             for (int i = 0; i < ResultsPageSize && i < neoForDate.ElementCount; i++)
             {
                 // right now we're only supporting one item per date. Should change this to not be a list until we support more dates
                 textResult.Append(GetTextResponseForNeo(neoForDate.ItemsByDate[0].NeoItems[i]));
                 ssmlResult.Append(GetSSMLResponseForNeo(neoForDate.ItemsByDate[0].NeoItems[i]));
             }
-
             ssmlResult.Append("</speak>");
 
-            return BuildResponse($"Threats for {neoForDate.ItemsByDate[0].Date}", textResult.ToString(), ssmlResult.ToString());
+            return BuildResponse($"Threats for {neoForDate.ItemsByDate[0].Date.ToString("dd/MM/yyyy")}", textResult.ToString(), ssmlResult.ToString());
 
         }
 
@@ -73,11 +71,11 @@ namespace NasaNeo.Business.ControllerServices
       
             var result = new StringBuilder();
 
-            result.Append($"<p>Object {neo.Name}.");
-            result.Append($" Diameter: {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} - {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet.");
-            result.Append($" Velocity: {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
-            result.Append($" It will miss us by: {Math.Round(neo.MissDistance.Miles, 0)} miles.");
-            result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.</p>");
+            result.Append($"\n\nObject {neo.Name}.");
+            result.Append($"\nDiameter: {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} - {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet.");
+            result.Append($"\nVelocity: {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
+            result.Append($"\nIt will miss us by: {Math.Round(neo.MissDistance.Miles, 0)} miles.");
+            result.Append($"\nHere is the Nasa JPL link for more information: {neo.NasaJplUrl}.");
             
             return result.ToString();
         }
@@ -112,7 +110,7 @@ namespace NasaNeo.Business.ControllerServices
             var repromptBody = new Alexa.NET.Response.Reprompt();
             repromptBody.OutputSpeech = repromptMessage;
 
-            var finalResponse = ResponseBuilder.AskWithCard(speech.Ssml, cardTitle, plainTextContent, repromptBody);
+            var finalResponse = ResponseBuilder.AskWithCard(speech, cardTitle, plainTextContent, repromptBody);
             //var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
             return finalResponse;
         }
