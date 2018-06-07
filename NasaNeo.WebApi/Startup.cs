@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NasaNeo.Business.NasaApi;
+using Alexa.NET.Security.Middleware;
 
 namespace NasaNeo.WebApi
 {
@@ -53,6 +54,7 @@ namespace NasaNeo.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAlexaRequestValidation();
             app.UseMvc();
         }
     }

@@ -93,9 +93,9 @@ namespace NasaNeo.WebApi.Controllers
                 //    return BadRequest();
                 //}
 
-                Request.Body.Position = 0;
+                //Request.Body.Position = 0;
                 var body = await new StreamReader(Request.Body, Encoding.UTF8).ReadToEndAsync();
-                Request.Body.Position = 0;
+                //Request.Body.Position = 0;
 
                 if (!await RequestVerification.Verify(signature, sigCertChainPath, body))
                 {

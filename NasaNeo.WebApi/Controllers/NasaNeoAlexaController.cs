@@ -53,11 +53,11 @@ namespace NasaNeo.WebApi.Controllers
                     LogMessage("input request is null", SeverityLevel.Error, null);
                 }
 
-                var validationResult = await CheckBadRequest(skillRequest);
-                if( validationResult != null )
-                {
-                    return validationResult;
-                }
+                //var validationResult = await CheckBadRequest(skillRequest);
+                //if( validationResult != null )
+                //{
+                //    return validationResult;
+                //}
 
 
                 // check what type of a request it is like an IntentRequest or a LaunchRequest
