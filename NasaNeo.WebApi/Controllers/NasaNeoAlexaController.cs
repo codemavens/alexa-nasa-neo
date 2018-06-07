@@ -48,7 +48,10 @@ namespace NasaNeo.WebApi.Controllers
             try
             {
                 var skillRequest = await GetSkillRequestFromPost();
-                if (skillRequest == null || skillRequest.Request == null) { LogMessage("input request is null", SeverityLevel.Error, null); }
+                if (skillRequest == null || skillRequest.Request == null)
+                {
+                    LogMessage("input request is null", SeverityLevel.Error, null);
+                }
 
                 var validationResult = await CheckBadRequest(skillRequest);
                 if( validationResult != null )

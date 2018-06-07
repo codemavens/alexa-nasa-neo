@@ -42,6 +42,11 @@ namespace NasaNeo.WebApi.Controllers
             return result;
         }
 
+        protected void LogMessage(string message, SeverityLevel severityLevel, string @class, string method)
+        {
+            LogMessage(message, severityLevel, new Dictionary<string, string>() { { "Class", @class }, { "Method", method } });
+        }
+
         protected void LogMessage(string message, SeverityLevel severityLevel, Dictionary<string, string> details)
         {
             var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();
@@ -89,19 +94,36 @@ namespace NasaNeo.WebApi.Controllers
                 //}
 
                 var rdr = new StreamReader(Request.Body);
-                if (!await RequestVerification.Verify(signature, sigCertChainPath, rdr.ReadToEnd()))
+                if (!await RequestVerification.Verify(signature, sigCertChainPath, await rdr.ReadToEndAsync()))
                 {
-                    LogMessage($"Request verification failed! ({signature}, {sigCertChainPath})", SeverityLevel.Error, null);
+                    LogMessage($"Request verification failed! ({signature}, {sigCertChainPath}, {await GetRequestDetails()})", SeverityLevel.Error, null);
                     return BadRequest();
                 }
             }
             catch (Exception exc)
             {
-                LogMessage("Request failed because of unknown error", SeverityLevel.Error, new Dictionary<string, string>() { { "StackTrace", exc.StackTrace } });
+                LogMessage($"Request failed because of unknown error. Request: {await GetRequestDetails()}", SeverityLevel.Error, new Dictionary<string, string>() { { "StackTrace", exc.StackTrace } });
                 return BadRequest();
             }
 
+            //Success, let's log the request info temporarily
+            LogMessage($"Successful request: {await GetRequestDetails()}", SeverityLevel.Verbose, "AlexaBaseController", "CheckBadRequest");
             return null;
+        }
+
+        protected async Task<string> GetRequestDetails()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var hdr in Request.Headers)
+            {
+                sb.Append($"{hdr.Key}: {hdr.Value}");
+            }
+
+            var rdr = new StreamReader(Request.Body);
+            sb.Append(await rdr.ReadToEndAsync());
+
+            return sb.ToString();
         }
 
     }
