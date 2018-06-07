@@ -54,33 +54,46 @@ namespace NasaNeo.WebApi.Controllers
         {
             try
             {
-                if (!Alexa.NET.Request.RequestVerification.RequestTimestampWithinTolerance(skillRequest))
+                if (!RequestVerification.RequestTimestampWithinTolerance(skillRequest))
                 {
                     LogMessage("Request failed due to TimestampTolerance", SeverityLevel.Error, null);
                     return BadRequest();
                 }
 
                 var sigCertChainUrl = Request.Headers["SignatureCertChainUrl"];
-                if (string.IsNullOrEmpty(sigCertChainUrl))
+                if (String.IsNullOrWhiteSpace(sigCertChainUrl))
                 {
                     LogMessage("Request failed due to no SignatureCertChainUrl", SeverityLevel.Error, null);
                     return BadRequest();
                 }
 
+                var signature = Request.Headers["Signature"];
+                if (String.IsNullOrWhiteSpace(signature))
+                {
+                    LogMessage("Request failed due to no Signature", SeverityLevel.Error, null);
+                    return BadRequest();
+                }
+
                 var sigCertChainPath = new Uri(sigCertChainUrl);
-                if (!Alexa.NET.Request.RequestVerification.VerifyCertificateUrl(sigCertChainPath))
+                if (!RequestVerification.VerifyCertificateUrl(sigCertChainPath))
                 {
-                    LogMessage("Request failed due to no invalid Certificate Url", SeverityLevel.Error, null);
+                    LogMessage($"Request failed due to an invalid Certificate Url ({sigCertChainPath})", SeverityLevel.Error, null);
                     return BadRequest();
                 }
 
-                var cert = await Alexa.NET.Request.RequestVerification.GetCertificate(sigCertChainPath);
-                if (!Alexa.NET.Request.RequestVerification.VerifyChain(cert))
+                //var cert = await RequestVerification.GetCertificate(sigCertChainPath);
+                //if (!RequestVerification.VerifyChain(cert))
+                //{
+                //    LogMessage("Request failed due to invalid Certificate Chain", SeverityLevel.Error, null);
+                //    return BadRequest();
+                //}
+
+                var rdr = new StreamReader(Request.Body);
+                if (!await RequestVerification.Verify(signature, sigCertChainPath, rdr.ReadToEnd()))
                 {
-                    LogMessage("Request failed due to no invalid Certificate Chain", SeverityLevel.Error, null);
+                    LogMessage($"Request verification failed! ({signature}, {sigCertChainPath})", SeverityLevel.Error, null);
                     return BadRequest();
                 }
-
             }
             catch (Exception exc)
             {
