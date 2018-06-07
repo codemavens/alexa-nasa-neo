@@ -93,10 +93,13 @@ namespace NasaNeo.WebApi.Controllers
                 //    return BadRequest();
                 //}
 
-                var rdr = new StreamReader(Request.Body);
-                if (!await RequestVerification.Verify(signature, sigCertChainPath, await rdr.ReadToEndAsync()))
+                Request.Body.Position = 0;
+                var body = await new StreamReader(Request.Body, Encoding.UTF8).ReadToEndAsync();
+                Request.Body.Position = 0;
+
+                if (!await RequestVerification.Verify(signature, sigCertChainPath, body))
                 {
-                    LogMessage($"Request verification failed! ({signature}, {sigCertChainPath}, {await GetRequestDetails()})", SeverityLevel.Error, null);
+                    LogMessage($"Request verification failed! (sig: {signature}, sig cert chain: {sigCertChainPath}, request details: {await GetRequestDetails()})", SeverityLevel.Error, null);
                     return BadRequest();
                 }
             }
