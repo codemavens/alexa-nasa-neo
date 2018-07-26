@@ -13,6 +13,7 @@ using Alexa.NET;
 using NasaNeo.Business.Models;
 using NasaNeo.Business;
 using NasaNeo.Business.NasaApi;
+using Alexa.NET.Request;
 
 namespace NasaNeo.WebApi.Controllers
 {
@@ -22,12 +23,14 @@ namespace NasaNeo.WebApi.Controllers
         private IConfiguration _configuration;
         private NasaNeoAlexaControllerService _controllerService;
         private INasaNeoRepo _repo;
-        
+        private Utils _util;
+
         public NasaNeoAlexaController(IConfiguration configuration, IServiceProvider serviceProvider, INasaNeoRepo repo)
         {
             _configuration = configuration;
             _controllerService = new NasaNeoAlexaControllerService(serviceProvider, repo);
             _repo = repo;
+            _util = new Utils();
         }
 
         [HttpGet]
@@ -40,21 +43,29 @@ namespace NasaNeo.WebApi.Controllers
 
         [HttpPost]
         [Route("alexa-home")]
-        public async Task<SkillResponse> AlexaHome()
+        public async Task<ActionResult> AlexaHome()
         {
             try
             {
-                var input = await GetSkillRequestFromPost();
-                if (input == null || input.Request == null) { LogMessage("input request is null", SeverityLevel.Error, null); }
+                var skillRequest = await GetSkillRequestFromPost();
+                if (skillRequest == null || skillRequest.Request == null)
+                {
+                    LogMessage("input request is null", SeverityLevel.Error, null);
+                }
+
+                //https://github.com/bignerdranch/developing-alexa-skills-solutions/blob/master/coursebook/mlbVUISessions_Chapter.pdf
+                //skillRequest.Session[]
+                //
+
 
                 // check what type of a request it is like an IntentRequest or a LaunchRequest
-                var requestType = input.GetRequestType();
-                LogMessage($"requestType == {requestType}", SeverityLevel.Information, null);
+                var requestType = skillRequest.GetRequestType();
+                //LogMessage($"requestType == {requestType}", SeverityLevel.Information, null);
 
                 if (requestType == typeof(IntentRequest))
                 {
                     // do some intent-based stuff
-                    var intentRequest = input.Request as IntentRequest;
+                    var intentRequest = skillRequest.Request as IntentRequest;
 
                     // check the name to determine what you should do
                     if (intentRequest.Intent.Name.Equals("TodayIntent"))
@@ -62,30 +73,39 @@ namespace NasaNeo.WebApi.Controllers
                         // get the slots
                         //var firstValue = intentRequest.Intent.Slots["FirstSlot"].Value;
 
-                        return await _controllerService.GetNeoForDate(DateTime.Today);
+                        return Json(await _controllerService.GetNeoForDate(DateTime.Today));
+                    }
+                    else if(intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Cancel) ||
+                            intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Stop))
+                    {
+                        return Json(Exit());
                     }
                     else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Help))
                     {
-                        return Help();
+                        return Json(Help());
+                    }
+                    else if (intentRequest.Intent.Name.Equals(Alexa.NET.Request.Type.BuiltInIntent.Fallback))
+                    {
+                        return Json(FallbackHelp());
                     }
                     else
                     {
-                        return ErrorResponse();
+                        return Json(ErrorResponse());
                     }
                 }
                 else if (requestType == typeof(Alexa.NET.Request.Type.LaunchRequest))
                 {
-                    return Usage();
+                    return Json(Usage());
                 }
                 else
                 {
-                    return ErrorResponse();
+                    return Json(ErrorResponse());
                 }
 
             }
             catch (Exception exc)
             {
-                return ErrorResponse(exc);
+                return Json(ErrorResponse(exc));
             }
         }
 
@@ -99,10 +119,18 @@ namespace NasaNeo.WebApi.Controllers
             var util = new Utils();
             // build the speech response 
             var speech = new Alexa.NET.Response.SsmlOutputSpeech();
-            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand)}</speak>";
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.IDidntUnderstand, false)}. Try saying 'What are today's threats' to list today's threats.</speak>";
+
+            // create the speech reprompt
+            var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
+            repromptMessage.Text = "Try saying 'What are today's threats' to list today's threats.";
+
+            // create the reprompt
+            var reprompt = new Alexa.NET.Response.Reprompt();
+            reprompt.OutputSpeech = repromptMessage;
 
             // create the response using the ResponseBuilder
-            var finalResponse = ResponseBuilder.Tell(speech);
+            var finalResponse = ResponseBuilder.Ask(speech, reprompt);
             return finalResponse;
         }
 
@@ -134,7 +162,7 @@ namespace NasaNeo.WebApi.Controllers
 
             // create the speech reprompt
             var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
-            repromptMessage.Text = "Would you like to know today's threats?";
+            repromptMessage.Text = "Try saying 'What are today's threats?'";
 
             // create the reprompt
             var repromptBody = new Alexa.NET.Response.Reprompt();
@@ -144,6 +172,35 @@ namespace NasaNeo.WebApi.Controllers
             return finalResponse;
         }
 
+        private SkillResponse FallbackHelp()
+        {
+            // create the speech response - cards still need a voice response
+            var speech = new Alexa.NET.Response.SsmlOutputSpeech();
+            speech.Ssml = $"<speak>{_util.GetRandomMessage(Globals.IDidntUnderstand)}. You might try 'What are today's threats?'</speak>";
+
+            // create the speech reprompt
+            var repromptMessage = new Alexa.NET.Response.PlainTextOutputSpeech();
+            repromptMessage.Text = "Try saying 'What are today's threats?'";
+
+            // create the reprompt
+            var repromptBody = new Alexa.NET.Response.Reprompt();
+            repromptBody.OutputSpeech = repromptMessage;
+
+            var finalResponse = ResponseBuilder.Ask(speech, repromptBody);
+            return finalResponse;
+        }
+
+        private SkillResponse Exit()
+        {
+            var util = new Utils();
+            // build the speech response 
+            var speech = new Alexa.NET.Response.SsmlOutputSpeech();
+            speech.Ssml = $"<speak>{util.GetRandomMessage(Globals.GoodBye, false)}</speak>";
+
+            // create the response using the ResponseBuilder
+            var finalResponse = ResponseBuilder.Tell(speech);
+            return finalResponse;
+        }
 
     }
 }
