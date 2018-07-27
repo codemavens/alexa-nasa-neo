@@ -53,7 +53,7 @@ namespace NasaNeo.Business.ControllerServices
             }
             
             ssmlResult.Append($"<speak>{_util.GetRandomMessage(Globals.SSML.RedAlert)}{textResult.ToString()}");
-            for (int i = 0; i <= numResultsToReturn; i++)
+            for (int i = 0; i < numResultsToReturn; i++)
             {
                 // right now we're only supporting one item per date. Should change this to not be a list until we support more dates
                 textResult.Append(GetTextResponseForNeo(neoForDate.ItemsByDate[0].NeoItems[i]));
