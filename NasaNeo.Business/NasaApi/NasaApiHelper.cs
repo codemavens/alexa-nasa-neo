@@ -44,6 +44,8 @@ namespace NasaNeo.Business.NasaApi
 
         public static NasaNeoItemsForDate GetNasaNeoFromJson(DateTime date, dynamic neosForDate)
         {
+            var util = new Utils();
+
             var result = new NasaNeoItemsForDate()
             {
                 Date = date,
@@ -64,29 +66,29 @@ namespace NasaNeo.Business.NasaApi
                     AbsoluteMagnitudeH = item.absolute_magnitude_h,
                     EstimatedDiameter = new NasaNeoEstimatedDiameter()
                     {
-                        KilometersEstimatedMin = item.estimated_diameter.kilometers.estimated_diameter_min,
-                        KilometersEstimatedMax = item.estimated_diameter.kilometers.estimated_diameter_max,
-                        MetersEstimatedMin = item.estimated_diameter.meters.estimated_diameter_min,
-                        MetersEstimatedMax = item.estimated_diameter.meters.estimated_diameter_max,
-                        MilesEstimatedMin = item.estimated_diameter.miles.estimated_diameter_min,
-                        MilesEstimatedMax = item.estimated_diameter.miles.estimated_diameter_max,
-                        FeetEstimatedMin = item.estimated_diameter.feet.estimated_diameter_min,
-                        FeetEstimatedMax = item.estimated_diameter.feet.estimated_diameter_max,
+                        KilometersEstimatedMin = util.RoundWholeNumber((float)item.estimated_diameter.kilometers.estimated_diameter_min),
+                        KilometersEstimatedMax = util.RoundWholeNumber((float)item.estimated_diameter.kilometers.estimated_diameter_max),
+                        MetersEstimatedMin = util.RoundWholeNumber((float)item.estimated_diameter.meters.estimated_diameter_min),
+                        MetersEstimatedMax = util.RoundWholeNumber((float)item.estimated_diameter.meters.estimated_diameter_max),
+                        MilesEstimatedMin = util.RoundWholeNumber((float)item.estimated_diameter.miles.estimated_diameter_min),
+                        MilesEstimatedMax = util.RoundWholeNumber((float)item.estimated_diameter.miles.estimated_diameter_max),
+                        FeetEstimatedMin = util.RoundWholeNumber((float)item.estimated_diameter.feet.estimated_diameter_min),
+                        FeetEstimatedMax = util.RoundWholeNumber((float)item.estimated_diameter.feet.estimated_diameter_max),
                     },
                     IsPotentiallyHazardous = item.is_potentially_hazardous_asteroid,
                     CloseApproachDate = DateTime.Parse(item.close_approach_data[0].close_approach_date.Value),
                     RelativeVelocity = new NasaNeoRelativeVelocity()
                     {
-                        KilometersPerSecond = item.close_approach_data[0].relative_velocity.kilometers_per_second,
-                        KilometersPerHour = item.close_approach_data[0].relative_velocity.kilometers_per_hour,
-                        MilesPerHour = item.close_approach_data[0].relative_velocity.miles_per_hour,
+                        KilometersPerSecond = util.RoundWholeNumber((float)item.close_approach_data[0].relative_velocity.kilometers_per_second),
+                        KilometersPerHour = util.RoundWholeNumber((float)item.close_approach_data[0].relative_velocity.kilometers_per_hour),
+                        MilesPerHour = util.RoundWholeNumber((float)item.close_approach_data[0].relative_velocity.miles_per_hour),
                     },
                     MissDistance = new NasaNeoMissDistance()
                     {
-                        Astronomical = item.close_approach_data[0].miss_distance.astronomical,
-                        Lunar = item.close_approach_data[0].miss_distance.lunar,
-                        Kilometers = item.close_approach_data[0].miss_distance.kilometers,
-                        Miles = item.close_approach_data[0].miss_distance.miles,
+                        Astronomical = util.RoundWholeNumber((float)item.close_approach_data[0].miss_distance.astronomical),
+                        Lunar = util.RoundWholeNumber((float)item.close_approach_data[0].miss_distance.lunar),
+                        Kilometers = util.RoundWholeNumber((float)item.close_approach_data[0].miss_distance.kilometers),
+                        Miles = util.RoundWholeNumber((float)item.close_approach_data[0].miss_distance.miles),
                     },                    
                 };
 
