@@ -49,7 +49,7 @@ namespace NasaNeo.Business.ControllerServices
             textResult.Append($"There are {neoForDate.ElementCount} threats to earth today.");
             if( numResultsToReturn < neoForDate.ElementCount)
             {
-                textResult.Append($"Here are the top {ResultsPageSize}.");
+                textResult.Append($" Here are the top {ResultsPageSize}.");
             }
             
             ssmlResult.Append($"<speak>{_util.GetRandomMessage(Globals.SSML.RedAlert)}{textResult.ToString()}");
@@ -85,7 +85,7 @@ namespace NasaNeo.Business.ControllerServices
             
             result.Append($"<p>Object {neo.Name}");
             result.Append($" is between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} and {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet in diameter.");
-            result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour");
+            result.Append($" It is hurtling towards us at approximately {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles per hour");
             result.Append($" and it will miss us by a mere {Math.Round(neo.MissDistance.Miles, 0)} miles <break strength=\"weak\" /><emphasis level=\"strong\">{_util.GetRandomMessage(Globals.SSML.Wow)}</emphasis></p>");
             
             return result.ToString();
