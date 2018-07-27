@@ -75,7 +75,7 @@ namespace NasaNeo.Business.ControllerServices
             result.Append($" Diameter: between {Math.Round(neo.EstimatedDiameter.FeetEstimatedMin, 0)} - {Math.Round(neo.EstimatedDiameter.FeetEstimatedMax, 0)} feet.");
             result.Append($" Velocity: {Math.Round(neo.RelativeVelocity.MilesPerHour, 0)} miles  per hour.");
             result.Append($" It will miss us by: {Math.Round(neo.MissDistance.Miles, 0)} miles.");
-            result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.");
+            //result.Append($" Here is the Nasa JPL link for more information: {neo.NasaJplUrl}.");
             
             return result.ToString();
         }
@@ -111,6 +111,7 @@ namespace NasaNeo.Business.ControllerServices
             //repromptBody.OutputSpeech = repromptMessage;
             //var finalResponse = ResponseBuilder.AskWithCard(speech, cardTitle, plainTextContent, repromptBody);
             
+
             var finalResponse = ResponseBuilder.TellWithCard(speech, cardTitle, plainTextContent);
             return finalResponse;
         }

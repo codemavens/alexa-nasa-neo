@@ -6,7 +6,7 @@ namespace NasaNeo.Business
 {
     public static class Globals
     {
-        public static string FriendlyAppTitle = "Duck and Cover";
+        public static string FriendlyAppTitle = "Earth Defense";
 
         public static List<string> IDidntUnderstand = new List<string>() { "I didn't understand that request. Please try again.",
                                                                            "Hmmm, I'm not sure I can do that. Please try again.",
