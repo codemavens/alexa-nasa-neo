@@ -43,7 +43,7 @@ namespace NasaNeo.Business.ControllerServices
         {
             var textResult = new StringBuilder(10000);
             var ssmlResult = new StringBuilder(10000);
-            var numResultsToReturn = Math.Max(ResultsPageSize, neoForDate.ElementCount);
+            var numResultsToReturn = Math.Min(ResultsPageSize, neoForDate.ElementCount);
 
 
             textResult.Append($"There are {neoForDate.ElementCount} threats to earth today.");
@@ -53,7 +53,7 @@ namespace NasaNeo.Business.ControllerServices
             }
             
             ssmlResult.Append($"<speak>{_util.GetRandomMessage(Globals.SSML.RedAlert)}{textResult.ToString()}");
-            for (int i = 0; i < ResultsPageSize && i < neoForDate.ElementCount; i++)
+            for (int i = 0; i <= numResultsToReturn; i++)
             {
                 // right now we're only supporting one item per date. Should change this to not be a list until we support more dates
                 textResult.Append(GetTextResponseForNeo(neoForDate.ItemsByDate[0].NeoItems[i]));
