@@ -61,7 +61,7 @@ namespace NasaNeo.Business.ControllerServices
             }
             ssmlResult.Append("</speak>");
 
-            return BuildResponse($"Threats for {neoForDate.ItemsByDate[0].Date.ToString("dd/MM/yyyy")}", textResult.ToString(), ssmlResult.ToString());
+            return BuildResponse($"Threats for {neoForDate.ItemsByDate[0].Date.ToString("MM/dd/yyyy")}", textResult.ToString(), ssmlResult.ToString());
 
         }
 
