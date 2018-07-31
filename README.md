@@ -1,4 +1,4 @@
-Now live <a href="https://www.amazon.com/CodeMavens-Earth-Defense/dp/B07FYXGGWV/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1533005313&sr=1-1&keywords=earth+defense">on Amazon</a>
+Now live <a href="https://www.amazon.com/CodeMavens-Earth-Defense/dp/B07FYXGGWV/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1533005313&sr=1-1&keywords=earth+defense">on Amazon</a>.
 
 This is a simple Alexa skill that uses the Nasa NEO api to list the top threats to earth each day.
 
